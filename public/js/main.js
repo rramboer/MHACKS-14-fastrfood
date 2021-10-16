@@ -15,30 +15,35 @@ function calc_locations() {
   //pulling whole db each time, eventually think of optimization
   
 
-  // firebase.database().ref("Locations/").once("value").then((snapshot) => {
-  //   var locations = snapshot.val() || 'No Data';
+  //UPDATE DATABASE
+  firebase.database().ref("Locations/").once("value").then((snapshot) => {
+    var locations = snapshot.val() || 'No Data';
     
-  //   console.log(locations);
-  //   var n = locations[input_location].n_entries;
-  //   var new_wait_time = (input_wait_time+(locations[input_location].AverageWaitTime*n))/(n+1);
-  //   console.log("Old wait time for "+input_location+ ": "+locations[input_location].AverageWaitTime+" : n ="+n);
-  //   console.log("New avg wait time for "+input_location+": "+new_wait_time);
+    console.log(locations);
+    var n = locations[input_location].n_entries;
+    var new_wait_time = (input_wait_time+(locations[input_location].AverageWaitTime*n))/(n+1);
+    console.log("Old wait time for "+input_location+ ": "+locations[input_location].AverageWaitTime+" : n ="+n);
+    console.log("New avg wait time for "+input_location+": "+new_wait_time);
 
-  //   // //optimization thoughts, probably doesn't matter
-  //   // firebase.database().ref("locations/"+input_location+"/AverageWaitTime").set(new_wait_time);
-  //   // firebase.database().ref("locations/"+input_location+"/n_entries").set(n+1);
+    //optimization thoughts, probably doesn't matter
 
-  //   // //Update displays
-  //   // var current_pos = locations[input_location].Position;
-  //   // var cost_map ={};
-  //   // for(let i;i<locations.length;i++){
-  //   //   loc_pos = locations[i].Position;
-  //   //   cost_map[locations[i].key()]=cost(current_pos,loc_pos,wait_time);
-  //   // }
+    var updates = {};
+    updates["Locations/"+input_location+"/AverageWaitTime"]=new_wait_time;
+    updates["Locations/"+input_location+"/n_entries"]=n+1;
+    firebase.database().ref().update(updates);
 
-  //   // console.log(cost_map);
-  // });
+    //Update displays
+    var current_pos = locations[input_location].Position;
+    var cost_map ={};
+    for(let i;i<locations.length;i++){
+      loc_pos = locations[i].Position;
+      cost_map[locations[i].key()]=cost(current_pos,loc_pos,wait_time);
+    }
 
+
+    //UPDATE WEBPAGE
+    // console.log(cost_map);
+  });
 
 
 
