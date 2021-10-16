@@ -15,22 +15,22 @@ function calc_locations() {
   //pulling whole db each time, eventually think of optimization
   
 
-  // //UPDATE DATABASE
-  // firebase.database().ref("Locations/").once("value").then((snapshot) => {
-  //   var locations = snapshot.val() || 'No Data';
+  //UPDATE DATABASE
+  firebase.database().ref("Locations/").once("value").then((snapshot) => {
+    var locations = snapshot.val() || 'No Data';
     
-  //   console.log(locations);
-  //   var n = locations[input_location].n_entries;
-  //   var new_wait_time = (input_wait_time+(locations[input_location].AverageWaitTime*n))/(n+1);
-  //   console.log("Old wait time for "+input_location+ ": "+locations[input_location].AverageWaitTime+" : n ="+n);
-  //   console.log("New avg wait time for "+input_location+": "+new_wait_time);
+    console.log(locations);
+    var n = locations[input_location].n_entries;
+    var new_wait_time = (input_wait_time+(locations[input_location].AverageWaitTime*n))/(n+1);
+    console.log("Old wait time for "+input_location+ ": "+locations[input_location].AverageWaitTime+" : n ="+n);
+    console.log("New avg wait time for "+input_location+": "+new_wait_time);
 
-  //   //optimization thoughts, probably doesn't matter
+    //optimization thoughts, probably doesn't matter
 
-  //   var updates = {};
-  //   updates["Locations/"+input_location+"/AverageWaitTime"]=new_wait_time;
-  //   updates["Locations/"+input_location+"/n_entries"]=n+1;
-  //   firebase.database().ref().update(updates);
+    var updates = {};
+    updates["Locations/"+input_location+"/AverageWaitTime"]=new_wait_time;
+    updates["Locations/"+input_location+"/n_entries"]=n+1;
+    firebase.database().ref().update(updates);
 
     //Update displays
     var current_pos = locations[input_location].Position;
@@ -38,7 +38,6 @@ function calc_locations() {
 
     for(const location in locations){
       loc_pos = locations[location].Position;
-      // console.log(loc_pos);
       cost_map[location]=parseFloat(cost(current_pos,loc_pos,locations[location].AverageWaitTime));
     }
 
@@ -55,7 +54,7 @@ function calc_locations() {
     $("#East-cost").text("East cost");
     $("#Bursley-cost").text("Bursley cost");
 
-  // });
+  });
 
 
 
