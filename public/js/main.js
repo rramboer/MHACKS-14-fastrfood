@@ -34,15 +34,21 @@ function calc_locations() {
 
     //Update displays
     var current_pos = locations[input_location].Position;
-    var cost_map ={};
-    for(let i;i<locations.length;i++){
-      loc_pos = locations[i].Position;
-      cost_map[locations[i].key()]=cost(current_pos,loc_pos,wait_time);
+    var cost_map = [];
+
+    for(const location in locations){
+      loc_pos = locations[location].Position;
+      // console.log(loc_pos);
+      cost_map[location]=parseFloat(cost(current_pos,loc_pos,locations[location].AverageWaitTime));
     }
+
+    cost_map[input_location]=input_wait_time;
+    console.log(cost_map);
 
 
     //UPDATE WEBPAGE
-    // console.log(cost_map);
+    
+    
   });
 
 
