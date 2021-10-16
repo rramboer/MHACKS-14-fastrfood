@@ -15,22 +15,22 @@ function calc_locations() {
   //pulling whole db each time, eventually think of optimization
   
 
-  //UPDATE DATABASE
-  firebase.database().ref("Locations/").once("value").then((snapshot) => {
-    var locations = snapshot.val() || 'No Data';
+  // //UPDATE DATABASE
+  // firebase.database().ref("Locations/").once("value").then((snapshot) => {
+  //   var locations = snapshot.val() || 'No Data';
     
-    console.log(locations);
-    var n = locations[input_location].n_entries;
-    var new_wait_time = (input_wait_time+(locations[input_location].AverageWaitTime*n))/(n+1);
-    console.log("Old wait time for "+input_location+ ": "+locations[input_location].AverageWaitTime+" : n ="+n);
-    console.log("New avg wait time for "+input_location+": "+new_wait_time);
+  //   console.log(locations);
+  //   var n = locations[input_location].n_entries;
+  //   var new_wait_time = (input_wait_time+(locations[input_location].AverageWaitTime*n))/(n+1);
+  //   console.log("Old wait time for "+input_location+ ": "+locations[input_location].AverageWaitTime+" : n ="+n);
+  //   console.log("New avg wait time for "+input_location+": "+new_wait_time);
 
-    //optimization thoughts, probably doesn't matter
+  //   //optimization thoughts, probably doesn't matter
 
-    var updates = {};
-    updates["Locations/"+input_location+"/AverageWaitTime"]=new_wait_time;
-    updates["Locations/"+input_location+"/n_entries"]=n+1;
-    firebase.database().ref().update(updates);
+  //   var updates = {};
+  //   updates["Locations/"+input_location+"/AverageWaitTime"]=new_wait_time;
+  //   updates["Locations/"+input_location+"/n_entries"]=n+1;
+  //   firebase.database().ref().update(updates);
 
     //Update displays
     var current_pos = locations[input_location].Position;
@@ -47,9 +47,15 @@ function calc_locations() {
 
 
     //UPDATE WEBPAGE
-    
-    
-  });
+    // console.log(cost_map);
+    // document.getElementById("top-dining-hall").innerHTML = "Best dining hall";
+    $("#top").html('<h3 class="text-center card-header" id="top-dining-hall">Top dining hall</h3>');
+    $("#Mojo-cost").text("Mojo cost");
+    $("#South-cost").text("South cost");
+    $("#East-cost").text("East cost");
+    $("#Bursley-cost").text("Bursley cost");
+
+  // });
 
 
 
