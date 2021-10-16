@@ -38,7 +38,7 @@ function calc_locations() {
 
     for(const location in locations){
       loc_pos = locations[location].Position;
-      cost_map[location]=parseFloat(cost(current_pos,loc_pos,locations[location].AverageWaitTime));
+      cost_map[location]=parseInt(cost(current_pos,loc_pos,locations[location].AverageWaitTime));
     }
 
     cost_map[input_location]=input_wait_time;
@@ -46,18 +46,26 @@ function calc_locations() {
 
 
     //UPDATE WEBPAGE
-    // console.log(cost_map);
-    // document.getElementById("top-dining-hall").innerHTML = "Best dining hall";
-    $("#top").html('<h3 class="text-center card-header" id="top-dining-hall">Top dining hall</h3>');
-    $("#Mojo-cost").text("Mojo cost");
-    $("#South-cost").text("South cost");
-    $("#East-cost").text("East cost");
-    $("#Bursley-cost").text("Bursley cost");
+    var min_loc = input_location;
+    for(const cost in cost_map){
+      if(cost_map[cost]<cost_map[min_loc]){
+        min_loc = cost
+      }
+    }
+
+    var formatting = [];
+    formatting["MoJo"] = "Mosher-Jordan";
+    formatting["SouthQuad"] = "South Quad";
+    formatting["EastQuad"] = "East Quad";
+    formatting["Bursley"] = "Bursley";
+
+    $("#top").html('<h3 class="text-center card-header" id="top-dining-hall">You Should Go To '+formatting[min_loc]+' for Fastest Food</h3>');
+    $("#Mojo-cost").text("Time till Food: "+cost_map["MoJo"]+" mins");
+    $("#South-cost").text("Time till Food: "+cost_map["SouthQuad"]+" mins");
+    $("#East-cost").text("Time till Food: "+cost_map["EastQuad"]+" mins");
+    $("#Bursley-cost").text("Time till Food: "+cost_map["Bursley"]+" mins");
 
   });
-
-
-
 
 }
 
