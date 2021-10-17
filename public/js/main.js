@@ -54,17 +54,17 @@ function calc_locations() {
           updates["Entry_Logs/"+input_location+"/"]=newList;
           firebase.database().ref().update(updates);
         }
+
       });
 
-        //optimization thoughts, probably doesn't matter
 
-        var updates = {};
-        updates["Locations/" + input_location + "/AverageWaitTime"] = new_wait_time;
-        updates["Locations/" + input_location + "/n_entries"] = n + 1;
-        firebase.database().ref().update(updates);
+
 
     //this allows us to not need to regrab database, since old average wait for location is irrelevant
+    current_pos = locations[input_location].Position;
+    cost_map = [];
     cost_map[input_location]=input_wait_time;
+
     console.log(cost_map);
 
         for (const location in locations) {
