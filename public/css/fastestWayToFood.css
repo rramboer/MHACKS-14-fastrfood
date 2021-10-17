@@ -1,7 +1,21 @@
 .card {
-    margin-bottom: 16px;
+    margin-bottom: 1.8rem;
 }
 
 .card-subtitle {
     font-weight: 600;
+}
+
+.bg-light {
+    padding: 0;
+}
+
+.form-group {
+    margin: 0.7rem;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #939393;
+    border-color: #939393;
 }

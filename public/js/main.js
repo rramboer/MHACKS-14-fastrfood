@@ -4,8 +4,8 @@ function calc_locations() {
     console.log("Calculating Locations");
     //using user info to update database
 
-  var input_location = document.getElementById("input_location").value;
-  var input_wait_time = parseInt(document.getElementById("wait_time").value);
+    var input_location = document.getElementById("input_location").value;
+    var input_wait_time = parseInt(document.getElementById("wait_time").value);
 
     console.log(input_location);
     console.log(input_wait_time);
@@ -13,57 +13,57 @@ function calc_locations() {
 
     //pulling whole db each time, eventually think of optimization
 
-  //UPDATE DATABASE
-  firebase.database().ref("Locations/").once("value").then((snapshot) => {
-    var locations = snapshot.val() || 'No Data';
-    
-    console.log(locations);
-    
-    var now = Date();
+    //UPDATE DATABASE
+    firebase.database().ref("Locations/").once("value").then((snapshot) => {
+        var locations = snapshot.val() || 'No Data';
 
-    var newEntryRef = firebase.database().ref("Entry_Logs/"+input_location+"/").push();
-    newEntryRef.set({
-      wait_time: input_wait_time,
-      timestamp: now
-    });
-    
+        console.log(locations);
 
-    firebase.database().ref("Entry_Logs/"+input_location+"/").once("value").then((entry_snapshot) =>{
-        var entries = entry_snapshot.val() || 'No Data';
-        // console.log(entries);
-        var sum = 0;
-        var n = 0;
-        const decay_time_minutes = 30;
-        var newList = [];
+        var now = Date();
 
-        for(const entry in entries){
-          console.log(Math.abs(Date.parse(now) - Date.parse(entries[entry].timestamp)));
-          if(Math.abs(Date.parse(now) - Date.parse(entries[entry].timestamp))<decay_time_minutes*1000*60){
-            newList.push(entries[entry]);
-            sum += entries[entry].wait_time;
-            n++;
-          }
-        }
-
-        console.log(newList);
+        var newEntryRef = firebase.database().ref("Entry_Logs/" + input_location + "/").push();
+        newEntryRef.set({
+            wait_time: input_wait_time,
+            timestamp: now
+        });
 
 
-        if(n>0){
-          var updates = {};
-          updates["Locations/"+input_location+"/AverageWaitTime"]=sum/n;
-          updates["Entry_Logs/"+input_location+"/"]=newList;
-          firebase.database().ref().update(updates);
-        }
+        firebase.database().ref("Entry_Logs/" + input_location + "/").once("value").then((entry_snapshot) => {
+            var entries = entry_snapshot.val() || 'No Data';
+            // console.log(entries);
+            var sum = 0;
+            var n = 0;
+            const decay_time_minutes = 30;
+            var newList = [];
 
-      });
+            for (const entry in entries) {
+                console.log(Math.abs(Date.parse(now) - Date.parse(entries[entry].timestamp)));
+                if (Math.abs(Date.parse(now) - Date.parse(entries[entry].timestamp)) < decay_time_minutes * 1000 * 60) {
+                    newList.push(entries[entry]);
+                    sum += entries[entry].wait_time;
+                    n++;
+                }
+            }
+
+            console.log(newList);
+
+
+            if (n > 0) {
+                var updates = {};
+                updates["Locations/" + input_location + "/AverageWaitTime"] = sum / n;
+                updates["Entry_Logs/" + input_location + "/"] = newList;
+                firebase.database().ref().update(updates);
+            }
+
+        });
 
 
 
 
-    //this allows us to not need to regrab database, since old average wait for location is irrelevant
-    current_pos = locations[input_location].Position;
-    cost_map = [];
-    console.log(cost_map);
+        //this allows us to not need to regrab database, since old average wait for location is irrelevant
+        current_pos = locations[input_location].Position;
+        cost_map = [];
+        console.log(cost_map);
 
         for (const location in locations) {
             loc_pos = locations[location].Position;
@@ -89,14 +89,84 @@ function calc_locations() {
         if (min_loc == input_location) {
             $("#top").html('<h3 class="text-center card-header" id="top-dining-hall"><small>You Should Stay At</small><br>' + formatting[min_loc] + '<br><small>for Fastest Food.</small></h3>');
         } else {
-            $("#top").html('<h3 class="text-center card-header" id="top-dining-hall"><small>You Should Go To</small><br>' + formatting[min_loc] + '<br><small>for Fastest Food.</small></h3>');
+            // $("#top").html('<h3 class="text-center card-header" id="top-dining-hall"><small>You Should Go To</small><br>' + formatting[min_loc] + '<br><small>for Fastest Food.</small></h3>');
+            var suggestion = '<h3 class="text-center card-header" id="top-dining-hall"><small>You Should Go To</small><br>' + formatting[min_loc] + '<br><small>for Fastest Food.</small></h3>';
+            // if (min_loc == 'MoJo') {
+            //     switch (input_location) {
+            //         case 'MoJo':
+            //             break;
+            //         case 'SouthQuad':
+            //             suggestion = suggestion + '<a href="https://goo.gl/maps/TGvsZfrz2mYxayB8A" class="btn btn-primary">Take Me There</a>'
+            //             break;
+            //         case 'EastQuad':
+            //             suggestion = suggestion + '<a href="https://goo.gl/maps/Y2Kx3RLHhBZwuctv6" class="btn btn-primary">Take Me There</a>'
+            //             break;
+            //         case 'Bursley':
+            //             suggestion = suggestion + '<a href="https://goo.gl/maps/EaYkABTFgkAceKui7" class="btn btn-primary">Take Me There</a>'
+            //             break;
+            //         default:
+            //             break;
+            //     }
+            // } else if (min_loc == 'SouthQuad') {
+            //     switch (input_location) {
+            //         case 'MoJo':
+            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
+            //             break;
+            //         case 'SouthQuad':
+            //             break;
+            //         case 'EastQuad':
+            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
+            //             break;
+            //         case 'Bursley':
+            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
+            //             break;
+            //         default:
+            //             break;
+            //     }
+
+            // } else if (min_loc == 'EastQuad') {
+            //     switch (input_location) {
+            //         case 'MoJo':
+            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
+            //             break;
+            //         case 'SouthQuad':
+            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
+            //             break;
+            //         case 'EastQuad':
+            //             break;
+            //         case 'Bursley':
+            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
+            //             break;
+            //         default:
+            //             break;
+            //     }
+            // } else if (min_loc == 'Bursley') {
+            //     switch (input_location) {
+            //         case 'MoJo':
+            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
+            //             break;
+            //         case 'SouthQuad':
+            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
+            //             break;
+            //         case 'EastQuad':
+            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
+            //             break;
+            //         case 'Bursley':
+            //             break;
+            //         default:
+            //             break;
+            //     }
+            // }
+            $("#top").html(suggestion);
         }
 
         //update wait time for each
-        $("#Mojo-cost").text("Time till Food: " + cost_map["MoJo"] + " mins");
-        $("#South-cost").text("Time till Food: " + cost_map["SouthQuad"] + " mins");
-        $("#East-cost").text("Time till Food: " + cost_map["EastQuad"] + " mins");
-        $("#Bursley-cost").text("Time till Food: " + cost_map["Bursley"] + " mins");
+        $("#Mojo-cost").text("Time to Food: " + cost_map["MoJo"] + " mins");
+        $("#South-cost").text("Time to Food: " + cost_map["SouthQuad"] + " mins");
+        $("#East-cost").text("Time to Food: " + cost_map["EastQuad"] + " mins");
+        $("#Bursley-cost").text("Time to Food: " + cost_map["Bursley"] + " mins");
+
+
 
     });
 
@@ -110,4 +180,3 @@ function cost(loc1, loc2, wait_time) {
 function dist(loc1, loc2) {
     return Math.sqrt((loc1[0] - loc2[0]) ** 2 + (loc1[1] - loc2[1]) ** 2);
 }
-
