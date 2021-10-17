@@ -19,14 +19,13 @@ function calc_locations() {
     
     console.log(locations);
     
-    const decay_time_seconds = 30;
     var now = Date();
 
     var newEntryRef = firebase.database().ref("Entry_Logs/"+input_location+"/").push();
     newEntryRef.set({
       wait_time: input_wait_time,
       timestamp: now
-    })
+    });
     
 
     firebase.database().ref("Entry_Logs/"+input_location+"/").once("value").then((entry_snapshot) =>{
@@ -34,12 +33,12 @@ function calc_locations() {
         // console.log(entries);
         var sum = 0;
         var n = 0;
-        const decay_time_seconds = 30;
+        const decay_time_minutes = 30;
         var newList = [];
 
         for(const entry in entries){
           console.log(Math.abs(Date.parse(now) - Date.parse(entries[entry].timestamp)));
-          if(Math.abs(Date.parse(now) - Date.parse(entries[entry].timestamp))<decay_time_seconds*1000){
+          if(Math.abs(Date.parse(now) - Date.parse(entries[entry].timestamp))<decay_time_minutes*1000*60){
             newList.push(entries[entry]);
             sum += entries[entry].wait_time;
             n++;
@@ -55,7 +54,7 @@ function calc_locations() {
           updates["Entry_Logs/"+input_location+"/"]=newList;
           firebase.database().ref().update(updates);
         }
-      })
+      });
 
         //optimization thoughts, probably doesn't matter
 
