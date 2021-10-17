@@ -7,10 +7,11 @@
     <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-database.js"></script>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap Real Estate Page Template</title>
+    <title>Fastest Way to Food</title>
     <!-- Bootstrap -->
     <link href="css/bootstrap-4.4.1.css" rel="stylesheet">
-
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href='css/FastestWayToFood.css' />
 </head>
 
 <body>
@@ -136,7 +137,7 @@
         </div>
       </div>
     </section> -->
-    <div class="col-12 card bg-light mx-auto">
+    <!-- <div class="col-lg-12 card bg-light mx-auto">
         <div id="top">
             <h3 class="text-center card-header" id="top-dining-hall">Fastest way to Food</h3>
         </div>
@@ -145,10 +146,10 @@
                 <label for="location1" class="col-form-label">&nbsp;Your Location</label>
                 <select class="form-control" name="location" id="input_location">
                     <option value="MoJo">Mojo</option>
-					<option value="SouthQuad">South Quad</option>
+					          <option value="SouthQuad">South Quad</option>
                     <option value="EastQuad">East Quad</option>
-					<option value="Bursley">Bursley</option>
-                  </select>
+					          <option value="Bursley">Bursley</option>
+                </select>
             </div>
             <div class="form-group row">
                 <label for="pricefrom" class="col-form-label">&nbsp;Estimated Wait Time&nbsp;</label>
@@ -159,14 +160,41 @@
                     <input type="text" class="form-control" id="wait_time" aria-describedby="basic-addon1">
                 </div>
             </div>
-            <p class="text-center"><a href="#" class="btn btn-danger" onclick="calc_locations()" role="button">Submit
-	</a></p>
+            <p class="text-center"><a href="#" class="btn btn-danger" onclick="calc_locations()" role="button">Submit</a></p>
         </form>
-    </div>
+    </div> -->
+
     <hr>
+
     <div class="container">
+        <div class="col-lg-12 card bg-light mx-auto">
+            <div id="top">
+                <h3 class="text-center card-header" id="top-dining-hall">Fastest Way to Food</h3>
+            </div>
+            <form class="card-body">
+                <div class="form-group row">
+                    <label for="location1" class="col-form-label">&nbsp;Your Location</label>
+                    <select class="form-control" name="location" id="input_location">
+                        <option value="MoJo">Mojo</option>
+                        <option value="SouthQuad">South Quad</option>
+                        <option value="EastQuad">East Quad</option>
+                        <option value="Bursley">Bursley</option>
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <label for="pricefrom" class="col-form-label">&nbsp;Estimated Wait Time&nbsp;</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text" id="basic-addon1">mins</div>
+                        </div>
+                        <input type="text" class="form-control" id="wait_time" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <p class="text-center"><a href="#" class="btn btn-danger" onclick="calc_locations()" role="button">Submit</a></p>
+            </form>
+        </div>
         <div class="row">
-            <div class="col-lg-8 col-12">
+            <div class="col-lg-12 col-12">
                 <div class="row">
                     <div class="col-sm-6 col-12">
                         <div class="card">
@@ -174,7 +202,6 @@
                             <div class="card-body">
                                 <h5 class="card-title">Mojo&nbsp;</h5>
                                 <p class="card-text">Situated on the Hill, Mosher-Jordan offers a superb view of Palmer Field and even better food.</p>
-
                                 <div class="card-subtitle" id="Mojo-cost"></div>
                             </div>
                         </div>
@@ -197,7 +224,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">East Quad&nbsp;</h5>
                                 <p class="card-text">Located right by Ross, East Quad features a wide variety of vegan and vegatarian options.</p>
-                                <div class="card-sibtitle" id="East-cost"></div>
+                                <div class="card-subtitle" id="East-cost"></div>
                             </div>
                         </div>
                     </div>
@@ -207,24 +234,25 @@
                             <div class="card-body">
                                 <h5 class="card-title">Bursley</h5>
                                 <p class="card-text">As the only dining hall on North, Bursley has a homely feel and a famous Chicken Broccoli Bake.&nbsp;</p>
-                                <a class="card-subtitle" id="Bursley-cost"></div>
+                                <div class="card-subtitle" id="Bursley-cost"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-        <hr>
+        <!-- <hr> -->
         <!-- <div class="col-lg-4 col-12">
           <div class="row mx-0">
            
             </div>
-</div> -->
-        </div>
-      </div>
+    </div> -->
+    </div>
+    <!-- </div> -->
 
     <hr>
-    <section>
-      <!-- <div class="container">
+    <!-- <section> -->
+    <!-- <div class="container">
         <div class="row">
           <div class="col-md-6 col-12">
             <h3>New Properties</h3>
@@ -348,25 +376,29 @@
                         </div>
                     </div>
                 </div> -->
-                <footer class="text-center">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12">
-                                <p>Copyright © MyWebsite. All rights reserved.</p>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-                <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-                <script src="js/jquery-3.4.1.min.js"></script>
-                <!-- Include all compiled plugins (below), or include individual files as needed -->
-                <script src="js/popper.min.js"></script>
-                <script src="js/bootstrap-4.4.1.js"></script>
 
-                <!-- <script src="/__/firebase/9.1.1/firebase-database-compat.js"></script>
+    <footer class="text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <p>Bon appétit!</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery-3.4.1.min.js"></script>
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap-4.4.1.js"></script>
+
+    <!-- <script src="/__/firebase/9.1.1/firebase-database-compat.js"></script>
     <script src="js/initializeFirebase.js"></script>
     <script src="/__/firebase/init.js"></script> -->
-                <script src="js/main.js"></script>
+    <script src="js/main.js"></script>
+
 </body>
 
 </html>
