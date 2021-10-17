@@ -16,6 +16,9 @@
 
 <body>
     <script type="module" src="js/initializeFirebase.js"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNVKwm8UadwUfd9rreQVZWb1j7K4X4tO4">
+    </script>
+
     <!-- <script data-main="js/moment.js" src="js/require.min.js"></script> -->
     <!-- <script src="js/moment.js"></script> -->
     <!-- <script>moment().format();</script> -->
@@ -190,7 +193,7 @@
                         <input type="text" class="form-control" id="wait_time" aria-describedby="basic-addon1">
                     </div>
                 </div>
-                <p class="text-center"><a href="#" class="btn btn-danger" onclick="calc_locations()" role="button">Submit</a></p>
+                <p class="text-center"><a href="#" class="btn btn-danger" onclick="gmaps_call()" role="button">Submit</a></p>
             </form>
         </div>
         <div class="row">

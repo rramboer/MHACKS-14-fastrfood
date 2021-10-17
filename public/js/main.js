@@ -1,6 +1,45 @@
 // import { getDatabase, ref, set } from "firebase/database";
 
-function calc_locations() {
+
+function callback(response, status) {
+    if (status == 'OK') {
+        console.log(response);
+    }
+}
+
+
+function gmaps_call() {
+    var input_location = document.getElementById("input_location").value;
+
+    firebase.database().ref("Locations/").once("value").then((snapshot) => {
+        var locations = snapshot.val() || 'No Data';
+        origin = [];
+        destination = [];
+
+        for (const location in locations) {
+            if (location == input_location) {
+                origin.push(locations[location].Address);
+            } else {
+                destination.push(locations[location].Address);
+            }
+        }
+
+        var service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix({
+            origins: origin,
+            destinations: destination,
+            travelMode: 'WALKING',
+        }, calc_locations);
+    });
+}
+
+function calc_locations(response, status) {
+
+    // var origin = "600 E Madison St, Ann Arbor, MI 48109";//south quad
+    // var destinationA = "701 E University Ave, Ann Arbor, MI 48109";//east quad
+    // var destinationB = "200 Observatory St, Ann Arbor, MI 48109";//mojo
+    // var destinationC = "1931 Duffield St, Ann Arbor, MI 48109"; //bursley
+
     console.log("Calculating Locations");
     //using user info to update database
 
@@ -15,6 +54,10 @@ function calc_locations() {
 
     //UPDATE DATABASE
     firebase.database().ref("Locations/").once("value").then((snapshot) => {
+
+        if (status == "OK") {
+            console.log(response);
+        }
         var locations = snapshot.val() || 'No Data';
 
         console.log(locations);
@@ -66,8 +109,17 @@ function calc_locations() {
         console.log(cost_map);
 
         for (const location in locations) {
-            loc_pos = locations[location].Position;
-            cost_map[location] = parseInt(cost(current_pos, loc_pos, locations[location].AverageWaitTime));
+            var travel_time = 0;
+            for (var i = 0; i < response.destinationAddresses.length; i++) {
+                console.log(response.destinationAddresses[i]);
+                console.log(locations[location].Address);
+                var dest_address = response.destinationAddresses[i];
+                var loc_address = locations[location].Address;
+                if (dest_address.slice(dest_address.length - 30) == loc_address.slice(loc_address.length - 30)) {
+                    travel_time = response.rows[0].elements[i].duration.value / 60;
+                }
+            }
+            cost_map[location] = parseInt(travel_time + locations[location].AverageWaitTime);
         }
         cost_map[input_location] = input_wait_time;
 
@@ -89,84 +141,14 @@ function calc_locations() {
         if (min_loc == input_location) {
             $("#top").html('<h3 class="text-center card-header" id="top-dining-hall"><small>You Should Stay At</small><br>' + formatting[min_loc] + '<br><small>for Fastest Food.</small></h3>');
         } else {
-            // $("#top").html('<h3 class="text-center card-header" id="top-dining-hall"><small>You Should Go To</small><br>' + formatting[min_loc] + '<br><small>for Fastest Food.</small></h3>');
-            var suggestion = '<h3 class="text-center card-header" id="top-dining-hall"><small>You Should Go To</small><br>' + formatting[min_loc] + '<br><small>for Fastest Food.</small></h3>';
-            // if (min_loc == 'MoJo') {
-            //     switch (input_location) {
-            //         case 'MoJo':
-            //             break;
-            //         case 'SouthQuad':
-            //             suggestion = suggestion + '<a href="https://goo.gl/maps/TGvsZfrz2mYxayB8A" class="btn btn-primary">Take Me There</a>'
-            //             break;
-            //         case 'EastQuad':
-            //             suggestion = suggestion + '<a href="https://goo.gl/maps/Y2Kx3RLHhBZwuctv6" class="btn btn-primary">Take Me There</a>'
-            //             break;
-            //         case 'Bursley':
-            //             suggestion = suggestion + '<a href="https://goo.gl/maps/EaYkABTFgkAceKui7" class="btn btn-primary">Take Me There</a>'
-            //             break;
-            //         default:
-            //             break;
-            //     }
-            // } else if (min_loc == 'SouthQuad') {
-            //     switch (input_location) {
-            //         case 'MoJo':
-            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
-            //             break;
-            //         case 'SouthQuad':
-            //             break;
-            //         case 'EastQuad':
-            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
-            //             break;
-            //         case 'Bursley':
-            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
-            //             break;
-            //         default:
-            //             break;
-            //     }
-
-            // } else if (min_loc == 'EastQuad') {
-            //     switch (input_location) {
-            //         case 'MoJo':
-            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
-            //             break;
-            //         case 'SouthQuad':
-            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
-            //             break;
-            //         case 'EastQuad':
-            //             break;
-            //         case 'Bursley':
-            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
-            //             break;
-            //         default:
-            //             break;
-            //     }
-            // } else if (min_loc == 'Bursley') {
-            //     switch (input_location) {
-            //         case 'MoJo':
-            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
-            //             break;
-            //         case 'SouthQuad':
-            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
-            //             break;
-            //         case 'EastQuad':
-            //             suggestion = suggestion + '<a href="#" class="btn btn-primary">Take Me There</a>'
-            //             break;
-            //         case 'Bursley':
-            //             break;
-            //         default:
-            //             break;
-            //     }
-            // }
-            $("#top").html(suggestion);
+            $("#top").html('<h3 class="text-center card-header" id="top-dining-hall"><small>You Should Go To</small><br>' + formatting[min_loc] + '<br><small>for Fastest Food.</small></h3>');
         }
 
         //update wait time for each
-        $("#Mojo-cost").text("Time to Food: " + cost_map["MoJo"] + " mins");
-        $("#South-cost").text("Time to Food: " + cost_map["SouthQuad"] + " mins");
-        $("#East-cost").text("Time to Food: " + cost_map["EastQuad"] + " mins");
-        $("#Bursley-cost").text("Time to Food: " + cost_map["Bursley"] + " mins");
-
-
+        $("#Mojo-cost").text("Time till Food: " + cost_map["MoJo"] + " mins");
+        $("#South-cost").text("Time till Food: " + cost_map["SouthQuad"] + " mins");
+        $("#East-cost").text("Time till Food: " + cost_map["EastQuad"] + " mins");
+        $("#Bursley-cost").text("Time till Food: " + cost_map["Bursley"] + " mins");
 
     });
 
@@ -176,6 +158,7 @@ function cost(loc1, loc2, wait_time) {
     const walk_speed = 1; //assumes how fast people walk, could be figured out later
     return ((dist(loc1, loc2) * walk_speed) + wait_time);
 }
+
 
 function dist(loc1, loc2) {
     return Math.sqrt((loc1[0] - loc2[0]) ** 2 + (loc1[1] - loc2[1]) ** 2);
