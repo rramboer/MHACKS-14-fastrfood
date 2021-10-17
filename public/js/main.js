@@ -4,7 +4,6 @@ function calc_locations() {
   console.log("Calculating Locations");
   //using user info to update database
 
-  //FILL IN WITH MIZUKI/RYAN
   var input_location = document.getElementById("input_location").value;
   var input_wait_time = parseInt(document.getElementById("wait_time").value);
 
@@ -20,17 +19,44 @@ function calc_locations() {
     var locations = snapshot.val() || 'No Data';
     
     console.log(locations);
-    var n = locations[input_location].n_entries;
-    var new_wait_time = (input_wait_time+(locations[input_location].AverageWaitTime*n))/(n+1);
-    console.log("Old wait time for "+input_location+ ": "+locations[input_location].AverageWaitTime+" : n ="+n);
-    console.log("New avg wait time for "+input_location+": "+new_wait_time);
+    
+    const decay_time_seconds = 30;
+    var now = Date();
 
-    //optimization thoughts, probably doesn't matter
+    var newEntryRef = firebase.database().ref("Entry_Logs/"+input_location+"/").push();
+    newEntryRef.set({
+      wait_time: input_wait_time,
+      timestamp: now
+    })
+    
 
-    var updates = {};
-    updates["Locations/"+input_location+"/AverageWaitTime"]=new_wait_time;
-    updates["Locations/"+input_location+"/n_entries"]=n+1;
-    firebase.database().ref().update(updates);
+    firebase.database().ref("Entry_Logs/"+input_location+"/").once("value").then((entry_snapshot) =>{
+        var entries = entry_snapshot.val() || 'No Data';
+        // console.log(entries);
+        var sum = 0;
+        var n = 0;
+        const decay_time_seconds = 30;
+        var newList = [];
+
+        for(const entry in entries){
+          console.log(Math.abs(Date.parse(now) - Date.parse(entries[entry].timestamp)));
+          if(Math.abs(Date.parse(now) - Date.parse(entries[entry].timestamp))<decay_time_seconds*1000){
+            newList.push(entries[entry]);
+            sum += entries[entry].wait_time;
+            n++;
+          }
+        }
+
+        console.log(newList);
+
+
+        if(n>0){
+          var updates = {};
+          updates["Locations/"+input_location+"/AverageWaitTime"]=sum/n;
+          updates["Entry_Logs/"+input_location+"/"]=newList;
+          firebase.database().ref().update(updates);
+        }
+      })
 
     //Update displays
     var current_pos = locations[input_location].Position;
@@ -41,6 +67,7 @@ function calc_locations() {
       cost_map[location]=parseInt(cost(current_pos,loc_pos,locations[location].AverageWaitTime));
     }
 
+    //this allows us to not need to regrab database, since old average wait for location is irrelevant
     cost_map[input_location]=input_wait_time;
     console.log(cost_map);
 
@@ -49,7 +76,7 @@ function calc_locations() {
     var min_loc = input_location;
     for(const cost in cost_map){
       if(cost_map[cost]<cost_map[min_loc]){
-        min_loc = cost
+        min_loc = cost;
       }
     }
 
@@ -78,6 +105,3 @@ function dist(loc1,loc2){
   return Math.sqrt((loc1[0]-loc2[0])**2 + (loc1[1]-loc2[1])**2);
 }
 
-function print(){
-    console.log("Pressed");
-}
