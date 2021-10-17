@@ -63,23 +63,13 @@ function calc_locations() {
     //this allows us to not need to regrab database, since old average wait for location is irrelevant
     current_pos = locations[input_location].Position;
     cost_map = [];
-    cost_map[input_location]=input_wait_time;
-
     console.log(cost_map);
 
         for (const location in locations) {
             loc_pos = locations[location].Position;
             cost_map[location] = parseInt(cost(current_pos, loc_pos, locations[location].AverageWaitTime));
         }
-
-    //UPDATE WEBPAGE
-    var min_loc = input_location;
-    for(const cost in cost_map){
-      if(cost_map[cost]<cost_map[min_loc]){
-        min_loc = cost;
-      }
-    }
-
+        cost_map[input_location] = input_wait_time;
 
         //UPDATE WEBPAGE
         var min_loc = input_location;
