@@ -1,5 +1,6 @@
 # MHACKS-14-fastrfood
-Project can be viewed here: https://tinyurl.com/fastrfood
+MHACKS Submission and Demo can be viewed here: https://devpost.com/software/fastr-food
+Website: https://tinyurl.com/fastrfood
 
 # Inspiration
 Our team members are no fans of the long lines often required to check into a dining hall at UMich. We wanted to create a nifty solution to allow hungry students to eat sooner. In particular, we wanted to provide informed decisions about when it is faster to wait in line at one dining hall, or commute to another one in hopes of a shorter line.
