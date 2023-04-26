@@ -1,5 +1,7 @@
 # MHACKS-14-fastrfood
 MHACKS Submission and Demo can be viewed here: https://devpost.com/software/fastr-food 
+
+Won "Best Beginner Hack" and "Best Use of Google Cloud" categories of he MHACKS-14 Hackathon
 <!-- Website: https://tinyurl.com/fastrfood
  -->
 # Inspiration
